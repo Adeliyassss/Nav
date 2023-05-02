@@ -39,7 +39,10 @@ class OnBoardingAdapter(private val onClick: (OnBoard) -> Unit) : Adapter<OnBoar
     }
 
     override fun onBindViewHolder(holder: OnBoardingViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(data.get(position))
+        holder.itemView.setOnClickListener{
+            onClick(OnBoard())
+        }
     }
 
     override fun getItemCount(): Int {
