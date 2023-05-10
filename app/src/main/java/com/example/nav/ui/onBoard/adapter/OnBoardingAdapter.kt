@@ -39,7 +39,7 @@ class OnBoardingAdapter(private val onClick: (OnBoard) -> Unit) : Adapter<OnBoar
     }
 
     override fun onBindViewHolder(holder: OnBoardingViewHolder, position: Int) {
-        holder.bind(data.get(position))
+        holder.bind(data[position])
         holder.itemView.setOnClickListener{
             onClick(OnBoard())
         }

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.nav.data.remote.Pref
+import com.example.nav.data.local.Pref
 import com.example.nav.databinding.FragmentOnBoardingBinding
 import com.example.nav.model.OnBoard
 import com.example.nav.ui.onBoard.adapter.OnBoardingAdapter
@@ -27,13 +27,11 @@ class OnBoardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         pref = Pref(requireContext())
         val adapter = OnBoardingAdapter(this::onClick)
+
         binding.viewPager.adapter = adapter
         binding.indicator.setViewPager(binding.viewPager)
         adapter.registerAdapterDataObserver(binding.indicator.adapterDataObserver);
-
-
     }
-
 
     fun onClick(onBoard: OnBoard) {
         findNavController().navigateUp()

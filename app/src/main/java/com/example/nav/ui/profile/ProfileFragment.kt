@@ -9,8 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
-import com.example.nav.R
-import com.example.nav.data.remote.Pref
+import com.example.nav.data.local.Pref
 import com.example.nav.databinding.FragmentProfileBinding
 import com.example.nav.utils.loadImage
 
@@ -39,7 +38,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pref=Pref(requireContext())
+        pref= Pref(requireContext())
 
         binding.etName.setText(pref.getUserName())
         binding.imgProfile.loadImage(pref.getImg())

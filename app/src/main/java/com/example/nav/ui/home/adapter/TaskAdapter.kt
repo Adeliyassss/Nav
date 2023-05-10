@@ -7,12 +7,9 @@ import com.example.nav.databinding.ItemTaskBinding
 import com.example.nav.model.Task
 
 
-
-class TaskAdapter(private val onLongClick: (Task)->Unit) :
+class TaskAdapter(private val onLongClick: (Task) -> Unit, private val onClick: (task:Task) -> Unit) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     private val data = arrayListOf<Task>()
-
-
 
     fun addTasks(task: List<Task>) {
         data.clear()
@@ -24,9 +21,7 @@ class TaskAdapter(private val onLongClick: (Task)->Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         return TaskViewHolder(
             ItemTaskBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
         )
     }
@@ -50,6 +45,9 @@ class TaskAdapter(private val onLongClick: (Task)->Unit) :
                 false
             }
 
+            itemView.setOnClickListener {
+                onClick(task)
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.nav.data.remote
+package com.example.nav.data.local
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE

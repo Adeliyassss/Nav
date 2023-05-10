@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val adapter = TaskAdapter(this::onLongClick)
+    private val adapter = TaskAdapter(this::onLongClick, this::onClick)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,5 +71,9 @@ class HomeFragment : Fragment() {
     private fun setData() {
         val list = App.db.taskDao().getAll()
         adapter.addTasks(list)
+    }
+
+    private fun onClick(task: Task){
+        findNavController().navigate(HomeFragmentDirections.actionNavigationHomeToTaskFragment(task))
     }
 }

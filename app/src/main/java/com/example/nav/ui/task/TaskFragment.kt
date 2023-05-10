@@ -5,9 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.nav.App
 import com.example.nav.R
 import com.example.nav.model.Task
@@ -17,34 +19,62 @@ import com.example.nav.databinding.FragmentTaskBinding
 class TaskFragment : Fragment() {
 
     private lateinit var binding: FragmentTaskBinding
+    private lateinit var navArgs: TaskFragmentArgs
+    private var task: Task? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding=FragmentTaskBinding.inflate(inflater, container,false)
+        binding = FragmentTaskBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            navArgs = TaskFragmentArgs.fromBundle(it)
+            task = navArgs.task
+        }
+
+        if (task != null){
+            binding.etTitle.setText(task?.title)
+            binding.etDescription.setText(task?.desc)
+            binding.btnSave.text = "Update"
+        }else{
+            binding.btnSave.text = "Save"
+        }
+
+        save()
+
+    }
+
+    private fun save() {
         binding.btnSave.setOnClickListener {
-            save()
+            val data = Task(
+                title = binding.etTitle.text.toString(),
+                desc = binding.etDescription.text.toString(),
+            )
+            if (data.title!!.isEmpty() || data.desc!!.isEmpty()){
+                Toast.makeText(requireContext(), "Title & Desc не должны быть пусты", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (task != null){
+                task!!.title = data.title
+                task!!.desc = data.desc
+                App.db.taskDao().update(task!!)
+            }else{
+                task = Task(title = data.title, desc = data.desc)
+                App.db.taskDao().insert(task!!)
+            }
+            findNavController().navigateUp()
         }
     }
 
-    private fun save(){
-        val data = Task(
-            title = binding.etTitle.text.toString(),
-            desc = binding.etDescription.text.toString(),
-        )
-        App.db.taskDao().insert(data)
-        findNavController().navigateUp()
-    }
-
-    companion object{
-        const val TASK_REQUEST="task.requestKey"
-        const val TASK_KEY="task.key"
+    companion object {
+        const val TASK_REQUEST = "task.requestKey"
+        const val TASK_KEY = "task.key"
     }
 
 }

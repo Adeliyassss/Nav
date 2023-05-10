@@ -10,7 +10,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.nav.data.remote.Pref
+import com.example.nav.data.local.Pref
 import com.example.nav.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -42,23 +42,16 @@ class MainActivity : AppCompatActivity() {
 
             )
         )
-        navController.addOnDestinationChangedListener(object :
-            NavController.OnDestinationChangedListener {
-            override fun onDestinationChanged(
-                controller: NavController,
-                destination: NavDestination,
-                arguments: Bundle?
-            ) {
-                if (destination.id == R.id.onBoardingFragment) {
-                    navView.isVisible = false
-                    supportActionBar?.hide()
-                } else {
-                    navView.isVisible = true
-                    supportActionBar?.show()
-                }
-            }
-        })
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.onBoardingFragment) {
+                navView.isVisible = false
+                supportActionBar?.hide()
+            } else {
+                navView.isVisible = true
+                supportActionBar?.show()
+            }
+        }
     }
 }
