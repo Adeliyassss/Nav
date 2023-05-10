@@ -6,12 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nav.databinding.ItemTaskBinding
 import com.example.nav.model.Task
 
-class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
+
+class TaskAdapter(private val onLongClick: (Task)->Unit) :
+    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
     private val data = arrayListOf<Task>()
 
-    fun addTask(task: Task) {
-        data.add(0,task)
+
+
+    fun addTasks(task: List<Task>) {
+        data.clear()
+        data.addAll(task)
+        data.sortByDescending { it.id }
         notifyDataSetChanged()
     }
 
@@ -33,11 +39,17 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
         return data.size
     }
 
-    class TaskViewHolder(private val binding: ItemTaskBinding) :
+    inner class TaskViewHolder(private val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.tvTitle.text = task.title
             binding.tvDesc.text = task.desc
+
+            itemView.setOnLongClickListener {
+                onLongClick(task)
+                false
+            }
+
         }
     }
 }
